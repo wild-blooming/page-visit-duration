@@ -22,7 +22,7 @@ function getCurrentTabUrl(callback) {
 	  //write down hostname,startTime
 	  //if tab is not active,write down endTime
 	  //store {hostname,elapsed time}
-	var startTime = new Date().getTime();
+	var startTime = new Date();
 	console.log(startTime);
 	
     //var elapsed = 
