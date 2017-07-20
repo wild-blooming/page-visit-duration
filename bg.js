@@ -1,16 +1,3 @@
-//create object with properties "page" and "time on page"
-//push the object into map when page changing event is triggered(time stay on the page)
-//for element in the map,draw chart  
-
-//wrap in set get methods later
-//var currentPage = {
-//	"Hostname":undefined,
-//	"Timestayed":undefined
-//};
-//push obj currentPage into arr,[{name1,time1},{name2,time2}…],should be in order
-//arr like obj???,can't have duplicated name
-//map???duplicated key?ordered list,reverse key value to [time,name]
-//map.set("name","time"),
 var arr = [];
 var arr1 = [];
 var getCurrentTime = (function() {
@@ -24,24 +11,11 @@ function getActiveTabUrl(callback) {
 		var tab = tabs[0];
 		var url = new URL(tab.url);
 		var hostname = url.hostname;
-//		currentPage.Hostname = hostname;
-//		currentPage.Timestayed = getCurrentTime();
-		//currentPage obj is changed each time event fire
-//		if(currentPage.Hostname !== "newtab") {
-//			console.log("page visited:" + currentPage.Hostname);
-//			console.log("timestamp:" + currentPage.Timestayed);
-//
-//		}
-		//async
 		arr.push(Object.create({"hostname":hostname,"timestamp":getCurrentTime()}));
 		callback();
 	});
 }
 
-//chrome.runtime.onInstalled.addListener(function() {
-//			getActiveTabUrl();
-//	}
-//);
 
 chrome.tabs.onActivated.addListener(function() {
 			getActiveTabUrl(function() { 
@@ -54,30 +28,49 @@ chrome.tabs.onActivated.addListener(function() {
 					}
 				});
 
-//				arr.forEach(function(e,i,a) {
-				//	while(a.length !== 0) {
-				//		arr1.pop();
-				//	}
-						//pop all in arr1 first??? or arr.map(),return a new arr
-						//arr1.clear();
-//					arr1.push(Object.create({"hostname":e.hostname,"lapsed":a[i+1]["timestamp"] - a[i]["timestamp"]}));
-//					console.log(a[i]["timestamp"]+ "\n",a[i+1]["timestamp"]);
-//					a[i]["timestamp"] = a[i+1]["timestamp"] - a[i]["timestamp"];
-//					}
-			//		console.log(i,e["timestamp"]);
-//				});
+				arr1.pop();//remove last undefined element.
 
-				arr1.forEach(function(e,i) {
+				console.log(arr1);
+				var arr2 = arr1.map(function(e) {
+					return e.hostname;
+				});
+				arr2.forEach(function(e,i) {
 
 					console.log(i,e);
 				});
-				//should execute after getActiveTabUrl is done
-			});
-		//	var elapsed = (new Date()) - startTime;
-		//	console.log(elapsed);
-			
-	}
-);
+				//arr part1
+				let set = new Set(arr2);
+				arrHost = [...set];
+
+				//find duplicated element,mark the index,delete the element,till no duplicated exist
+				var arrNew = [];
+
+						//	var folded = arr1.map(function(e) {
+						//			return e.lapsed;
+						//	}).filter(function(e,i,a) {
+						//		console.log(a);
+						//		if(arrNew.indexOf(e) > -1) return true;
+						//	}).reduce(function(x,y) {
+						//		return x+y;
+						//	});
+						//	//arr part2
+						//	arrFoldedLapsed.push(folded);
+					//pull out while block from forEach loop
+				arr2.forEach(function(e,i,a) {
+					let idx = a.indexOf(e);
+					while(a.indexOf(e) > 0) {
+						this.push(idx);
+						idx = a.indexOf(e,idx+1);
+					}
+					console.log(arrNew);
+
+					a = a.filter(function(e,i) {
+						return this.indexOf(i) < 0;
+					},arrNew);
+					console.log(arr2);
+				},arrNew);
+	});
+});
 
 //duplicate on event fire
 
@@ -91,5 +84,9 @@ chrome.tabs.onActivated.addListener(function() {
 //		if(changeInfo.status === "complete") {
 //			getActiveTabUrl();
 //		}
+//	}
+//);
+//chrome.runtime.onInstalled.addListener(function() {
+//			getActiveTabUrl();
 //	}
 //);
