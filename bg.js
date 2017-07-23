@@ -45,6 +45,54 @@ chrome.tabs.onActivated.addListener(function() {
 				//find duplicated element,mark the index,delete the element,till no duplicated exist
 				var arrNew = [];
 
+				let flag;
+
+				for(var i = 0; i < arr2.length; i++) {
+					if(!arr2[i]) continue; 
+					var idx = arr2.indexOf(arr2[i],i+1);
+					while(idx >= 0) {
+						if(flag !== i) {
+							flag = i;
+							arrNew.push(i);
+							arrNew.push(idx);
+							delete arr2[idx];
+						} else {
+							arrNew.push(idx);
+							delete arr2[idx];
+						}
+						idx = arr2.indexOf(arr2[i],idx+1);
+					}
+					console.log(arrNew);
+					arrNew.length = 0;
+				}
+	});
+});
+//CONSIDING USING PLAIN LOOP FOR REMOVING ELEMENT REQ AND BREAK LOOP;no way to break forEach.using plain loop instead if need
+//				arr2.forEach(function(e,i,a) {
+//					let idx = a.indexOf(e,i+1);
+//					//find duplicated ele and push idx into arrNew
+//					while(idx >= 0) {	//a.indexOf(e) > 0 infinite loop caused crash
+//						if(flag !== i) {//a.indexOf(e) is always the lowest index of same ele,changed to i
+//							flag = i;
+//							this.push(i);
+//							this.push(idx);
+//						}else {
+//							this.push(idx);
+//						}
+//						idx = a.indexOf(e,idx+1);
+//					}
+//					console.log(this);
+//					console.log(...(new Set(this)));//if duplicated ele > 3,arrNew would be like [3,4,5],[3,4,5,4,5]
+//					console.log("bef filter:" + a);
+////would non duplicated ele be removed cause arrNew's repeat?????
+//					//filter out duplicated ele from arr2 based on index array:arrNew
+//					a = a.filter(function(e,i) {
+//						return this.indexOf(i) < 0;
+//					},arrNew);
+//					console.log("aft filter:" + a);
+//					//clear arrNew if it's not empty
+//					this.length = 0;//arrNew would be like [3,4,5],[4,5]
+//				},arrNew);
 						//	var folded = arr1.map(function(e) {
 						//			return e.lapsed;
 						//	}).filter(function(e,i,a) {
@@ -56,21 +104,7 @@ chrome.tabs.onActivated.addListener(function() {
 						//	//arr part2
 						//	arrFoldedLapsed.push(folded);
 					//pull out while block from forEach loop
-				arr2.forEach(function(e,i,a) {
-					let idx = a.indexOf(e);
-					while(a.indexOf(e) > 0) {
-						this.push(idx);
-						idx = a.indexOf(e,idx+1);
-					}
-					console.log(arrNew);
-
-					a = a.filter(function(e,i) {
-						return this.indexOf(i) < 0;
-					},arrNew);
-					console.log(arr2);
-				},arrNew);
-	});
-});
+//				a.filter.forEach
 
 //duplicate on event fire
 
