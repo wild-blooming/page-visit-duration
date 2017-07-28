@@ -38,10 +38,6 @@ chrome.tabs.onActivated.addListener(function() {
 
 					console.log(i,e);
 				});
-				//arr part1
-				let set = new Set(arr2);
-				arrHost = [...set];
-
 				//find duplicated element,mark the index,delete the element,till no duplicated exist
 				var arrNew = [];
 
@@ -62,45 +58,23 @@ chrome.tabs.onActivated.addListener(function() {
 						}
 						idx = arr2.indexOf(arr2[i],idx+1);
 					}
-					console.log(arrNew);
+					console.log("array New:" + arrNew);
+					
+					if(arrNew.length > 0) {
+						var sumUp = arr1.map(function(e) {
+							return e.lapsed;
+						}).filter(function(e,i) {
+							if(arrNew.indexOf(i) > -1) return true;
+						}).reduce(function(x,y) { //sum up
+							return x+y;
+						});
+					}
+					console.log("sum up:" + sumUp);
+
 					arrNew.length = 0;
 				}
 	});
 });
-//CONSIDING USING PLAIN LOOP FOR REMOVING ELEMENT REQ AND BREAK LOOP;no way to break forEach.using plain loop instead if need
-//				arr2.forEach(function(e,i,a) {
-//					let idx = a.indexOf(e,i+1);
-//					//find duplicated ele and push idx into arrNew
-//					while(idx >= 0) {	//a.indexOf(e) > 0 infinite loop caused crash
-//						if(flag !== i) {//a.indexOf(e) is always the lowest index of same ele,changed to i
-//							flag = i;
-//							this.push(i);
-//							this.push(idx);
-//						}else {
-//							this.push(idx);
-//						}
-//						idx = a.indexOf(e,idx+1);
-//					}
-//					console.log(this);
-//					console.log(...(new Set(this)));//if duplicated ele > 3,arrNew would be like [3,4,5],[3,4,5,4,5]
-//					console.log("bef filter:" + a);
-////would non duplicated ele be removed cause arrNew's repeat?????
-//					//filter out duplicated ele from arr2 based on index array:arrNew
-//					a = a.filter(function(e,i) {
-//						return this.indexOf(i) < 0;
-//					},arrNew);
-//					console.log("aft filter:" + a);
-//					//clear arrNew if it's not empty
-//					this.length = 0;//arrNew would be like [3,4,5],[4,5]
-//				},arrNew);
-						//	var folded = arr1.map(function(e) {
-						//			return e.lapsed;
-						//	}).filter(function(e,i,a) {
-						//		console.log(a);
-						//		if(arrNew.indexOf(e) > -1) return true;
-						//	}).reduce(function(x,y) {
-						//		return x+y;
-						//	});
 						//	//arr part2
 						//	arrFoldedLapsed.push(folded);
 					//pull out while block from forEach loop
