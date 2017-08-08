@@ -10,17 +10,23 @@ google.charts.load('current', {packages: ['corechart']});
 
 function drawChart() {
 	// Define the chart to be drawn.
-	var data = new google.visualization.DataTable();
-	data.addColumn('string','Hostname');
-	data.addColumn('number','LapsedTime');
+	var dt = new google.visualization.DataTable();
+	dt.addColumn('string','Hostname');
+	dt.addColumn('number','LapsedTime');
 
 	for(var i = 0;i <  bg.arr1.length;i++) {
-		data.addRow([bg.arr1[i].hostname,bg.arr1[i].lapsed]);
+		dt.addRow([bg.arr1[i].hostname,bg.arr1[i].lapsed]);
 	}
 			
+	var sum = google.visualization.data.group(
+			dt,
+			[0],
+			[{'column':1,'aggregation':google.visualization.data.sum,'type':'number'}]
+			);
+
 	 var options = {'width':400,
 		 'height':300};
 	 // Instantiate and draw the chart.
 	 var chart = new google.visualization.PieChart(document.getElementById('status'));
-	 chart.draw(data, options);
+	 chart.draw(sum, options);
 }
