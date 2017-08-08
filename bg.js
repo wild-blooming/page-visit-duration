@@ -19,9 +19,6 @@ function getActiveTabUrl(callback) {
 
 chrome.tabs.onActivated.addListener(function() {
 			getActiveTabUrl(function() { 
-				//stayed time = current time - previous time
-				//remove duplicated hostname,as data to draw pie chart
-				//format milliseconds to HH:MM:SS
 				arr1 = arr.map(function(e,i,a) {
 					if(a.length !== 1 && i !== a.length - 1) { //the last element or only one element is left undefined,
 						return ({"hostname":e.hostname,"lapsed":a[i+1]["timestamp"] - a[i]["timestamp"]}); 
@@ -75,12 +72,7 @@ chrome.tabs.onActivated.addListener(function() {
 				}
 	});
 });
-						//	//arr part2
-						//	arrFoldedLapsed.push(folded);
-					//pull out while block from forEach loop
-//				a.filter.forEach
 
-//duplicate on event fire
 
 //chrome.tabs.onCreated.addListener(
 //		function() {
