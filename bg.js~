@@ -19,19 +19,15 @@ function getActiveTabUrl(callback) {
 
 chrome.tabs.onActivated.addListener(function() {
 			getActiveTabUrl(function() { 
-				//stayed time = current time - previous time
-				//deal data before draw pie chart,remove duplicated hostname,as data to draw pie chart
-				//or deal data in DataTable?DataView support calculated columns,DataTable not
-				//format milliseconds to HH:MM:SS
-				arr1 = arr.map(function(e,i,a) {
-					if(a.length !== 1 && i !== a.length - 1) { //the last element or only one element is left undefined,
-						return ({"hostname":e.hostname,"lapsed":a[i+1]["timestamp"] - a[i]["timestamp"]}); 
-					}
-				});
+	//			arr1 = arr.map(function(e,i,a) {
+	//				if(a.length !== 1 && i !== a.length - 1) { //the last element or only one element is left undefined,
+	//					return ({"hostname":e.hostname,"lapsed":a[i+1]["timestamp"] - a[i]["timestamp"]}); 
+	//				}
+	//			});
+//Todo:e//xclude "extensions","newtab"
+	//			arr1.pop();//remove last undefined element.
 
-				arr1.pop();//remove last undefined element.
-
-				console.log(arr1);
+				console.log(arr);
 				var arr2 = arr1.map(function(e) {
 					return e.hostname;
 				});
@@ -76,41 +72,13 @@ chrome.tabs.onActivated.addListener(function() {
 				}
 	});
 });
-
-document.addEventListener('DOMContentLoaded', function() {
-
-	
-google.charts.setOnLoadCallback(drawChart);
+//Todo:popup tabs addListener
+//
+chrome.browserAction.onClicked.addListener(function() {
+//timestamp the last element
+				
+		arr.push(Object.create({"hostname":"iconClicked","timestamp":getCurrentTime()}));
 });
-//duplicate on event fire
-google.charts.load('current', {packages: ['corechart']});
-
-function drawChart() {
-			         // Define the chart to be drawn.
-	var data = new google.visualization.DataTable();
-	data.addColumn('string','Hostname');
-	data.addColumn('number','LapsedTime');
-
-	for(var i = 0;i <  arr1.length;i++) {
-		data.addRow([arr1[i].hostname,arr1[i].lapsed]);
-	}
-			
-
-//   	 var data = new google.visualization.DataTable();
-//	 data.addColumn('string', 'Element');
-//	 data.addColumn('number', 'Percentage');
-//	 data.addRows([
-//	       ['Nitrogen', 0.78],
-//	       ['Oxygen', 0.21],
-//	       ['Other', 0.01]
-//	 ]);
-
-	 var options = {'width':400,
-		 'height':300};
-							         // Instantiate and draw the chart.
-	 var chart = new google.visualization.PieChart(document.getElementById('status'));
-	 chart.draw(data, options);
-}
 
 //chrome.tabs.onCreated.addListener(
 //		function() {

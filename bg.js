@@ -19,15 +19,15 @@ function getActiveTabUrl(callback) {
 
 chrome.tabs.onActivated.addListener(function() {
 			getActiveTabUrl(function() { 
-				arr1 = arr.map(function(e,i,a) {
-					if(a.length !== 1 && i !== a.length - 1) { //the last element or only one element is left undefined,
-						return ({"hostname":e.hostname,"lapsed":a[i+1]["timestamp"] - a[i]["timestamp"]}); 
-					}
-				});
+	//			arr1 = arr.map(function(e,i,a) {
+	//				if(a.length !== 1 && i !== a.length - 1) { //the last element or only one element is left undefined,
+	//					return ({"hostname":e.hostname,"lapsed":a[i+1]["timestamp"] - a[i]["timestamp"]}); 
+	//				}
+	//			});
+//Todo:e//xclude "extensions","newtab"
+	//			arr1.pop();//remove last undefined element.
 
-				arr1.pop();//remove last undefined element.
-
-				console.log(arr1);
+				console.log(arr);
 				var arr2 = arr1.map(function(e) {
 					return e.hostname;
 				});
@@ -72,7 +72,13 @@ chrome.tabs.onActivated.addListener(function() {
 				}
 	});
 });
-
+//Todo:popup tabs addListener
+//has a popup,will not fire
+chrome.browserAction.onClicked.addListener(function() {
+//timestamp the last element
+				
+		arr.push(Object.create({"hostname":"iconClicked","timestamp":getCurrentTime()}));
+});
 
 //chrome.tabs.onCreated.addListener(
 //		function() {
